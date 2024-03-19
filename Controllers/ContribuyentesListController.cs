@@ -34,9 +34,11 @@ namespace adm_impuestos.Controllers
             // Consulta para incluir datos relacionados de la tabla PERSONA y filtrar por codcontrib
             var contribuyentes = await _context.Contribuyentes
                 .Include(c => c.Persona)
+                .Include(c => c.TipoContribuyente)
                 .Select(c => new
                 {
                     c.CodContrib,
+                    c.Status,
                     Persona = new
                     {
                         c.Persona.PNom,
@@ -44,7 +46,13 @@ namespace adm_impuestos.Controllers
                         c.Persona.PApe,
                         c.Persona.SApe,
                         c.Persona.RazonSocial,
+                        c.Persona.TipoIdent, 
                         c.Persona.DocumentoIdent
+                    },
+                    c.CodtipoContrib,
+                    TipoContribuyente = new 
+                    {                     
+                        c.TipoContribuyente.TipoContribuyente
                     }
                 })
                 .ToListAsync();
@@ -59,10 +67,12 @@ namespace adm_impuestos.Controllers
             // Consulta para incluir datos relacionados de la tabla PERSONA y filtrar por codcontrib
             var contribuyente = await _context.Contribuyentes
                 .Include(c => c.Persona)
+                .Include(c => c.TipoContribuyente)
                 .Where(c => c.CodContrib == id)
                 .Select(c => new
                 {
                     c.CodContrib,
+                    c.Status,
                     Persona = new
                     {
                         c.Persona.PNom,
@@ -70,7 +80,14 @@ namespace adm_impuestos.Controllers
                         c.Persona.PApe,
                         c.Persona.SApe,
                         c.Persona.RazonSocial,
+                        c.Persona.TipoIdent,
                         c.Persona.DocumentoIdent
+                    },
+                    c.CodtipoContrib,
+                    TipoContribuyente = new // Datos de la tercera tabla
+                    {
+                        c.TipoContribuyente.TipoContribuyente // Suponiendo que tienes un campo Nombre en la tabla TipoContribuyente
+                                                              // Agrega más campos según sea necesario
                     }
                 })
                 .FirstOrDefaultAsync();
