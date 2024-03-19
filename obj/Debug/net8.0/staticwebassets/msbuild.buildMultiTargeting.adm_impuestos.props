@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\adm_impuestos.props" />
+</Project>
