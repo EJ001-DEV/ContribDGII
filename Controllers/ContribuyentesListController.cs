@@ -1,7 +1,18 @@
-﻿using adm_impuestos.Models;
+﻿/*using adm_impuestos.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
+*/
+
+
+using adm_impuestos.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace adm_impuestos.Controllers
 {
@@ -18,16 +29,51 @@ namespace adm_impuestos.Controllers
 
         // GET: api/ContribuyentesList
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Contribuyente>>> GetContribuyentes()
+        public async Task<ActionResult<IEnumerable<object>>> GetContribuyentes()
         {
-            return await _context.Contribuyentes.ToListAsync();
+            // Consulta para incluir datos relacionados de la tabla PERSONA y filtrar por codcontrib
+            var contribuyentes = await _context.Contribuyentes
+                .Include(c => c.Persona)
+                .Select(c => new
+                {
+                    c.CodContrib,
+                    Persona = new
+                    {
+                        c.Persona.PNom,
+                        c.Persona.SNom,
+                        c.Persona.PApe,
+                        c.Persona.SApe,
+                        c.Persona.RazonSocial,
+                        c.Persona.DocumentoIdent
+                    }
+                })
+                .ToListAsync();
+
+            return contribuyentes;
         }
 
         // GET: api/ContribuyentesList/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Contribuyente>> GetContribuyente(int id)
+        public async Task<ActionResult<object>> GetContribuyente(int id)
         {
-            var contribuyente = await _context.Contribuyentes.FindAsync(id);
+            // Consulta para incluir datos relacionados de la tabla PERSONA y filtrar por codcontrib
+            var contribuyente = await _context.Contribuyentes
+                .Include(c => c.Persona)
+                .Where(c => c.CodContrib == id)
+                .Select(c => new
+                {
+                    c.CodContrib,
+                    Persona = new
+                    {
+                        c.Persona.PNom,
+                        c.Persona.SNom,
+                        c.Persona.PApe,
+                        c.Persona.SApe,
+                        c.Persona.RazonSocial,
+                        c.Persona.DocumentoIdent
+                    }
+                })
+                .FirstOrDefaultAsync();
 
             if (contribuyente == null)
             {
@@ -36,6 +82,7 @@ namespace adm_impuestos.Controllers
 
             return contribuyente;
         }
+
 
         // POST: api/ContribuyentesList
         [HttpPost]

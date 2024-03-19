@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("adm_impuestos")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c6f44969ba98086dce7c538e20da767762e78a04")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+02645740e94a0bd16b182ee2aa07182351d83c09")]
 [assembly: System.Reflection.AssemblyProductAttribute("adm_impuestos")]
 [assembly: System.Reflection.AssemblyTitleAttribute("adm_impuestos")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
