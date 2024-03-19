@@ -6,12 +6,19 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-//var builder = WebApplication.CreateBuilder(args);
-
 // Configuración del contexto de la base de datos
 var connectionString = "Server=localhost;Port=5432;Database=dgii_contrib;User Id=postgres;Password=antena123;";
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
 
+// Agregar la configuración de CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy",
+        builder => builder
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader());
+});
 
 var app = builder.Build();
 
@@ -27,6 +34,9 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+// Aplicar la configuración de CORS al middleware
+app.UseCors("CorsPolicy");
 
 app.UseAuthorization();
 
